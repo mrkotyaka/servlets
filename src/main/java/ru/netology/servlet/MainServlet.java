@@ -13,8 +13,8 @@ public class MainServlet extends HttpServlet {
     private final static String POST = "POST";
     private final static String GET = "GET";
     private final static String DELETE = "DELETE";
-    private final static String PATH = "/api/posts";
-    private final static String PATH_ID = "/api/posts/\\d+";
+    private final static String API = "/api/posts";
+    private final static String API_ID = "/api/posts/\\d+";
 
     @Override
     public void init() {
@@ -30,27 +30,27 @@ public class MainServlet extends HttpServlet {
             final var path = req.getRequestURI();
             final var method = req.getMethod();
             // primitive routing
-            if (method.equals(GET) && path.equals(PATH)) {
+            if (method.equals(GET) && path.equals(API)) {
                 controller.all(resp);
                 return;
             }
-            if (method.equals(GET) && path.matches(PATH_ID)) {
+            if (method.equals(GET) && path.matches(API_ID)) {
                 // easy way
                 final var id = Long.parseLong(getIdPost(path));
                 controller.getById(id, resp);
                 return;
             }
-            if (method.equals(POST) && path.equals(PATH)) {
+            if (method.equals(POST) && path.equals(API)) {
                 controller.save(req.getReader(), resp);
                 return;
             }
-            if (method.equals(POST) && path.matches(PATH_ID)) {
+            if (method.equals(POST) && path.matches(API_ID)) {
                 // new
                 final var id = Long.parseLong(getIdPost(path));
                 controller.save(id, req.getReader(), resp);
                 return;
             }
-            if (method.equals(DELETE) && path.matches(PATH_ID)) {
+            if (method.equals(DELETE) && path.matches(API_ID)) {
                 // easy way
                 final var id = Long.parseLong(getIdPost(path));
                 controller.removeById(id, resp);
