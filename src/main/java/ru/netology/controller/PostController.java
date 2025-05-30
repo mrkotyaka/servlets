@@ -24,8 +24,6 @@ public class PostController {
     }
 
     public void getById(long id, HttpServletResponse response) throws IOException {
-
-        // TODO: deserialize request & serialize response
         response.setContentType(APPLICATION_JSON);
         final var data = service.getById(id);
         final var gson = new Gson();
@@ -49,15 +47,8 @@ public class PostController {
     }
 
     public void removeById(long id, HttpServletResponse response) throws IOException {
-        // TODO: deserialize request & serialize response
         response.setContentType(APPLICATION_JSON);
-
-//        service.getById(id);
-
-        if (service.removeById(id)) {
-            response.getWriter().println("Post with id " + id + " was deleted!");
-        } else {
-            response.getWriter().println("Post with id " + id + " not found!");
-        }
+        service.removeById(id);
+        response.getWriter().print("Post with id " + id + " was deleted!");
     }
 }

@@ -1,85 +1,55 @@
 package ru.netology.repository;
 
+import com.sun.jdi.Value;
+import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 // Stub
 public class PostRepository {
-    private List<Post> posts;
-    private List<Long> postIdList;
-    private long postIds = 0;
-
-    final Object lock = new Object();
+    private final Map<Long, Post> postMap;
+    private final AtomicLong postIds;
 
     public PostRepository() {
-        posts = new ArrayList<>();
-        postIdList = new ArrayList<>();
-        postIdList.add(0L);
+        postMap = new ConcurrentHashMap<>();
+        postIds = new AtomicLong(1);
     }
 
     public List<Post> all() {
-        return posts; //Collections.emptyList();
+        return new ArrayList<>(postMap.values());
     }
 
     public Optional<Post> getById(long id) {
-        return posts.stream().filter(post1 -> post1.getId() == id).findFirst();
+//        return Optional.ofNullable(postMap.getOrDefault(id, new Post()));
+        return Optional.ofNullable(postMap.get(id));
     }
 
     public Post save(Post post) {
-        synchronized (lock) {
-            while (postIdList.contains(postIds)) {
-                postIds++;
-            }
+        while (postMap.containsKey(postIds.longValue())) postIds.getAndIncrement();
 
-            post.setId(postIds);
-            posts.add(post);
-            postIdList.add(postIds);
+        post.setId(postIds.getAndIncrement());
+        postMap.put(post.getId(), post);
 
-//    System.out.println(postIdList + " " + post.getId() + " " + post.getContent());
-        }
         return post;
     }
 
     public Post save(long id, Post post) {
-
         if (id == 0) return save(post);
 
-        synchronized (lock) {
-            if (postIdList.contains(id)) {
-                for (Post p : posts) {
-                    if (p.getId() == id) {
-                        p.setContent(post.getContent());
+        post.setId(id);
+        postMap.put(id, post);
 
-//          System.out.println(postIdList + " " + post.getId() + " " + post.getContent());
-
-                        return post;
-                    }
-                }
-            }
-
-            post.setId(id);
-            posts.add(post);
-            postIdList.add(id);
-
-//    System.out.println(postIdList + " " + post.getId() + " " + post.getContent());
-
-            return post;
-        }
+        return post;
     }
 
-    public boolean removeById(long id) {
-        synchronized (lock) {
-            if (posts.removeIf(post -> post.getId() == id)) {
-                postIdList.remove(id);
-
-                System.out.println(postIdList + " " + id);
-
-                return true;
-            }
-            return false;
+    public void removeById(long id) {
+        if (postMap.containsKey(id)) {
+            postMap.remove(id);
+        } else {
+            throw new NotFoundException("Post with id " + id + " not found");
         }
     }
 }
