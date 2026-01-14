@@ -1,66 +1,66 @@
-# Домашнее задание к занятию «2.1. Servlet Containers»
+# Homework assignment for lesson “2.1. Servlet Containers”
 
-В качестве решения пришлите ссылки на ваши GitHub-проекты в личном кабинете студента на сайте [netology.ru](https://netology.ru).
+As your solution, please send links to your GitHub projects in your personal student account on the website [netology.ru](https://netology.ru).
 
-**Важная информация**
+**Important information**
 
-1. Перед стартом работы изучите, пожалуйста, ссылки на главной странице [репозитория с домашними заданиями](../README.md).
-2. Если у вас что-то не получилось, тогда оформляйте Issue [по установленным правилам](../report-requirements.md).
+1. Before you start, please study the links on the main page of the [homework repository](../README.md).
+2. If you encounter any problems, please create an issue [according to the established rules](../report-requirements.md).
 
-## Как сдавать задачи
+## How to submit assignments
 
-1. Создайте на вашем компьютере Maven-проект.
-1. Инициализируйте в нём пустой Git-репозиторий.
-1. Добавьте в него готовый файл [.gitignore](../.gitignore).
-1. Добавьте в этот же каталог остальные необходимые файлы.
-1. Сделайте необходимые коммиты.
-1. Создайте публичный репозиторий на GitHub и свяжите свой локальный репозиторий с удалённым.
-1. Сделайте пуш: удостоверьтесь, что ваш код появился на GitHub.
-1. Ссылку на ваш проект отправьте в личном кабинете на сайте [netology.ru](https://netology.ru).
+1. Create a Maven project on your computer.
+1. Initialize an empty Git repository in it.
+1. Add the ready-made [.gitignore](../.gitignore) file to it.
+1. Add the rest of the necessary files to the same directory.
+1. Make the necessary commits.
+1. Create a public repository on GitHub and link your local repository to the remote one.
+1. Push: make sure your code appears on GitHub.
+1. Send a link to your project in your personal account on the [netology.ru](https://netology.ru) website.
 
 ## CRUD
 
-### Легенда
+### Legend
 
-В рамках лекции мы реализовали практически полноценный In-Memory CRUD-сервер (Create Read Update Delete) на базе сервлетов. Этому серверу не хватает двух вещей:
+As part of the lecture, we implemented a nearly complete In-Memory CRUD (Create Read Update Delete) server based on servlets. This server is missing two things:
 
-1. Привести код в должный вид: вынести методы в константы, убрать дублирующийся код.
-1. Реализовать репозиторий — пока вместо репозитория установлена заглушка.
+1. Bring the code into proper form: move methods to constants, remove duplicate code.
+1. Implement a repository — for now, a placeholder is installed instead of a repository.
 
-### Задача
+### Task
 
-1. Осуществите рефакторинг кода.
-1. Реализуйте репозиторий с учётом того, что методы репозитория могут вызываться конкурентно, т. е. в разных потоках.
+1. Refactor the code.
+1. Implement the repository taking into account that repository methods can be called concurrently, i.e., in different threads.
 
-Как должен работать `save`:
+How `save` should work:
 
-1. Если от клиента приходит пост с id=0, значит, это создание нового поста. Вы сохраняете его в списке и присваиваете ему новый id. Достаточно хранить счётчик с целым числом и увеличивать на 1 при создании каждого нового поста.
-1. Если от клиента приходит пост с id !=0, значит, это сохранение (обновление) существующего поста. Вы ищете его в списке по id и обновляете. Продумайте самостоятельно, что вы будете делать, если поста с таким id не оказалось: здесь могут быть разные стратегии.
+1. If a post with id=0 comes from the client, it means that a new post is being created. You save it in the list and assign it a new id. It is enough to keep a counter with an integer and increase it by 1 when each new post is created.
+1. If a post with id !=0 comes from the client, it means that this is a save (update) of an existing post. You search for it in the list by id and update it. Think for yourself what you will do if there is no post with such an id: there may be different strategies here.
 
-### Результат
+### Result
 
-В качестве решения пришлите ссылку на ваш GitHub-репозиторий в личном кабинете студента на сайте [netology.ru](https://netology.ru).
+As a solution, send a link to your GitHub repository in your personal student account on the [netology.ru](https://netology.ru) website.
 
-## WebApp Runner* (задача со звёздочкой)
+## WebApp Runner* (task with an asterisk)
 
-Это необязательная задача, её выполнение не влияет на получение зачёта.
+This is an optional task; its completion does not affect your grade.
 
-### Легенда
+### Legend
 
-Не всегда удобно «таскать» за собой полноценный Tomcat: скачивать его, распаковывать и т. д. Достаточно часто используют библиотеку [WebApp Runner](https://github.com/heroku/webapp-runner), ранее (com.github.jsimone webapp-runner).
+It is not always convenient to “carry” a full-fledged Tomcat with you: download it, unpack it, etc. Quite often, the [WebApp Runner](https://github.com/heroku/webapp-runner) library is used, formerly (com.github.jsimone webapp-runner).
 
-Встраивание WebApp Runner в ваш проект позволяет запускать его таким образом: `java -jar target/dependency/webapp-runner.jar target/<appname>.war`. Это достаточно удобно для размещения на облачных платформах.
+Embedding WebApp Runner into your project allows you to run it like this: `java -jar target/dependency/webapp-runner.jar target/<appname>.war`. This is quite convenient for hosting on cloud platforms.
 
-### Задача
+### Task
 
-Добавьте в свою сборку скачивание `webapp-runner` согласно [инструкции](https://github.com/heroku/webapp-runner#using-with-maven-in-your-project).
+Add the `webapp-runner` download to your build according to the [instructions](https://github.com/heroku/webapp-runner#using-with-maven-in-your-project).
 
-Убедитесь, что сборка проходит, и ваш war-файл действительно запускается указанной выше командой.
+Ensure that the build is successful and that your war file actually runs with the command specified above.
 
-### Результат
+### Result
 
-Реализуйте новую функциональность в ветке `feature/webapp-runner` вашего репозитория из предыдущего домашнего задания и откройте Pull Request.
+Implement the new functionality in the `feature/webapp-runner` branch of your repository from the previous homework assignment and open a Pull Request.
 
-В качестве результата пришлите ссылку на ваш Pull Request на GitHub в личном кабинете студента на сайте [netology.ru](https://netology.ru).
+As a result, send a link to your Pull Request on GitHub in your personal student account on the [netology.ru](https://netology.ru) website.
 
-После того, как домашнее задание будет принято, сделайте `merge` для Pull Request.
+Once your homework assignment has been accepted, perform a `merge` for the Pull Request.
